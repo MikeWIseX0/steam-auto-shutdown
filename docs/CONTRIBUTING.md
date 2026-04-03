@@ -52,6 +52,6 @@ Technical improvements and bug fixes should be submitted via Pull Requests.
 ---
 
 ## 🛠️ Architecture Compliance
-Review [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before implementing structural changes to ensure alignment with the established safety and caching patterns.
+Review [docs/ARCHITECTURE.md](ARCHITECTURE.md) before implementing structural changes to ensure alignment with the established safety and caching patterns.
 
 *All contributions are evaluated based on their impact on system integrity and performance.*
