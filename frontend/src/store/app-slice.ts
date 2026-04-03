@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { net } from '../wailsjs/go/models';
-import { ActionType, TProcess, TSettings } from '../types';
+import { ActionType, TSettings } from '../types';
 
 const getStoredSettings = () => {
   const stored = JSON.parse(localStorage.getItem('settings') || '{}');
@@ -10,33 +10,35 @@ const getStoredSettings = () => {
     diskActivityMonitor: stored.diskActivityMonitor || false,
     actionDelay: stored.actionDelay || 20,
     actionType: stored.actionType || ActionType.SHUTDOWN,
-    speedThreshold: stored.speedThreshold || 200
-  } as TSettings;
+    speedThreshold: stored.speedThreshold || 200,
+    selectedMac: stored.selectedMac || undefined,
+    targetProcess: stored.targetProcess || {
+      name: undefined,
+      id: undefined
+    }
+  };
 };
 
 export interface IAppState {
-  selectedMac: string | undefined;
   interfaces: net.InterfaceStat[];
   networkSpeed: number;
   diskSpeed: number;
-  targetProcess: TProcess | undefined;
   settings: TSettings;
   monitoring: boolean;
   monitorStatusMsg: string;
+  actionTimeout: number;
 }
 
+const stored = getStoredSettings();
+
 const initialState: IAppState = {
-  selectedMac: undefined,
   interfaces: [],
   networkSpeed: 0,
   diskSpeed: 0,
-  targetProcess: {
-    name: undefined,
-    id: undefined
-  } as TProcess,
-  settings: getStoredSettings(),
+  settings: stored as TSettings,
   monitoring: false,
-  monitorStatusMsg: ''
+  monitorStatusMsg: '',
+  actionTimeout: 10
 };
 
 export const appSlice = createSlice({
@@ -44,7 +46,8 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setSelectedMac: (state, action) => {
-      state.selectedMac = action.payload;
+      state.settings.selectedMac = action.payload;
+      localStorage.setItem('settings', JSON.stringify(state.settings));
     },
     setInterfaces: (state, action) => {
       state.interfaces = action.payload;
@@ -57,25 +60,43 @@ export const appSlice = createSlice({
     },
     toggleTheme: (state) => {
       state.settings.theme = state.settings.theme === 'dark' ? 'light' : 'dark';
-
       localStorage.setItem('settings', JSON.stringify(state.settings));
     },
     setTargetProcess: (state, action) => {
-      state.targetProcess = action.payload;
+      state.settings.targetProcess = action.payload;
+      localStorage.setItem('settings', JSON.stringify(state.settings));
     },
     setSettings: (state, action) => {
       state.settings = {
         ...state.settings,
         ...action.payload
       };
-
-      localStorage.setItem('settings', JSON.stringify(action.payload));
+      localStorage.setItem('settings', JSON.stringify(state.settings));
     },
     toggleMonitoring: (state) => {
       state.monitoring = !state.monitoring;
     },
     setMonitorStatusMsg: (state, action) => {
       state.monitorStatusMsg = action.payload;
+    },
+    setActionTimeout: (state, action) => {
+      state.actionTimeout = action.payload;
+    },
+    resetSettings: (state) => {
+      const defaults = {
+        theme: 'dark',
+        diskActivityMonitor: false,
+        actionDelay: 20,
+        actionType: ActionType.SHUTDOWN,
+        speedThreshold: 200,
+        selectedMac: undefined,
+        targetProcess: {
+          name: undefined,
+          id: undefined
+        }
+      };
+      state.settings = defaults as TSettings;
+      localStorage.setItem('settings', JSON.stringify(defaults));
     }
   }
 });

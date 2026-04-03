@@ -21,3 +21,7 @@ export function GetInterfaceDownloadSpeed(arg1) {
 export function GetInterfaces() {
   return window['go']['main']['NetworkManager']['GetInterfaces']();
 }
+
+export function SetContext(arg1) {
+  return window['go']['main']['NetworkManager']['SetContext'](arg1);
+}

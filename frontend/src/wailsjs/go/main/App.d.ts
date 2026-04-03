@@ -5,4 +5,8 @@ export function CancelShutdown():Promise<void>;
 
 export function ExecuteAction(arg1:string):Promise<void>;
 
+export function GetActionTimeout():Promise<number>;
+
 export function OpenInBrowser(arg1:string):Promise<void>;
+
+export function SetActionTimeout(arg1:number):Promise<void>;

@@ -10,7 +10,8 @@ const DiskSpeed = () => {
   const diskSpeed = useDiskSpeedInMegaBytes();
   const targetProcess = useTargetProcess();
 
-  const color = diskActivityMonitor ? 'text-gray-500' : 'text-gray-700';
+  const iconColor = diskActivityMonitor ? 'text-primary' : 'text-gray-600';
+  const textColor = diskActivityMonitor ? 'text-foreground font-medium' : 'text-gray-600';
 
   const tooltipContent = diskActivityMonitor ? (
     <p>
@@ -29,9 +30,9 @@ const DiskSpeed = () => {
       delay={300}
       closeDelay={0}
     >
-      <div className={`flex gap-1 items-center ${color}`}>
-        <IconServer2 size="0.9rem" />
-        <p className="text-sm">{diskSpeed.toFixed(2)} MB/s</p>
+      <div className="flex gap-1 items-center">
+        <IconServer2 size="0.9rem" className={iconColor} />
+        <p className={`text-sm ${textColor}`}>{diskSpeed.toFixed(2)} MB/s</p>
       </div>
     </Tooltip>
   );

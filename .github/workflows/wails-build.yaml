@@ -9,9 +9,9 @@ jobs:
       fail-fast: false
     runs-on: windows-latest
     outputs:
-      version: ${{ steps.extract_version.outputs.version }}
+      version: ${{ steps.extract_version.outputs.CURRENT_VERSION }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
         shell: bash
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Steam Auto Shutdown.exe
           path: ./build/bin/SteamAutoShutdown.exe

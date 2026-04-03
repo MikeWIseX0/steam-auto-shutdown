@@ -2,7 +2,13 @@
   "name": "steam-auto-shutdown",
   "private": true,
   "type": "module",
-  "version": "0.0.0",
+  "version": "6.1.0",
+  "author": "Diogo Martino <me@diogomartino.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diogomartino/steam-auto-shutdown"
+  },
+  "homepage": "https://github.com/diogomartino/steam-auto-shutdown",
   "dependencies": {
     "@nextui-org/react": "^2.2.1",
     "@reduxjs/toolkit": "^1.9.7",

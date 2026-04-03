@@ -14,7 +14,8 @@ export enum ActionType {
   SHUTDOWN = 'SHUTDOWN',
   HIBERNATE = 'HIBERNATE',
   SLEEP = 'SLEEP',
-  LOGOFF = 'LOGOFF'
+  LOGOFF = 'LOGOFF',
+  RESTART = 'RESTART'
 }
 
 export type TProcess = {
@@ -28,4 +29,6 @@ export type TSettings = {
   actionDelay: number; // seconds
   actionType: ActionType;
   speedThreshold: number; // KB/s
+  selectedMac: string | undefined;
+  targetProcess: TProcess;
 };

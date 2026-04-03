@@ -14,10 +14,16 @@ const MonitorSwitch = ({ isActive, setIsActive }: TMonitorSwitchProps) => {
   return (
     <Card className="w-[400px] h-[180px]">
       <CardBody className="flex flex-col justify-center items-center gap-2">
-        <Switch isSelected={isActive} onValueChange={setIsActive} size="lg" />
+        <Switch
+          isSelected={isActive}
+          onValueChange={setIsActive}
+          size="lg"
+          aria-label="Toggle system monitoring"
+          role="switch"
+        />
         {isActive ? (
           <>
-            <p className="text-primary font-bold">Auto shutdown is enabled</p>
+            <p className="text-primary font-bold">Auto {actionType.toLowerCase()} is enabled</p>
             <p className="text-foreground text-sm text-center">{statusMsg}</p>
             <p className="text-gray-500 text-sm text-center">
               Your network speed is being monitored and your PC will{' '}

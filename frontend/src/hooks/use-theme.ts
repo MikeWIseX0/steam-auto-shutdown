@@ -1,18 +1,18 @@
 import { useSelector } from 'react-redux';
 import { themeSelector } from '../selectors/app';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 const useTheme = () => {
   const theme = useSelector(themeSelector);
 
-  useEffect(() => {
-    const html = document.querySelector('html');
+  useLayoutEffect(() => {
+    const html = document.documentElement;
     if (theme === 'light') {
-      html?.classList.remove('dark');
-      html?.classList.add('light');
+      html.classList.remove('dark');
+      html.classList.add('light');
     } else {
-      html?.classList.remove('light');
-      html?.classList.add('dark');
+      html.classList.remove('light');
+      html.classList.add('dark');
     }
   }, [theme]);
 };

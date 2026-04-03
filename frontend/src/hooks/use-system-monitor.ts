@@ -6,16 +6,15 @@ import {
   settingsSelector
 } from '../selectors/app';
 import useMonitorStatus from './use-monitor-status';
+import { UI_MESSAGES } from '../constants/messages';
 import { setMonitorStatusMsg } from '../actions/app';
 import { openModal } from '../actions/modal';
 import { Modal } from '../types';
 import { DesktopApi } from '../desktop';
 
 const INTERVAL_MS = 1000;
-const IDLE_THRESHOLD = 5;
-
 let idleCounter = 0;
-let idleThresholdCounter = 0;
+let activityCounter = 0;
 
 const useSystemMonitor = () => {
   const interval = useRef<number | undefined>(undefined);
@@ -40,24 +39,24 @@ const useSystemMonitor = () => {
 
     if (isIdle) {
       idleCounter += 1;
-      idleThresholdCounter = 0;
+      activityCounter = Math.max(0, activityCounter - 1);
 
       setMonitorStatusMsg(
-        `No activity detected for ${idleCounter}/${actionDelay} seconds.`
+        UI_MESSAGES.MONITOR.IDLE_DETECTED(idleCounter, actionDelay)
       );
     } else {
-      idleThresholdCounter += 1;
+      activityCounter = Math.min(5, activityCounter + 1);
 
-      if (idleThresholdCounter >= IDLE_THRESHOLD) {
+      if (activityCounter >= 5) {
         idleCounter = 0;
       }
 
-      setMonitorStatusMsg('Download in progress.');
+      setMonitorStatusMsg(UI_MESSAGES.MONITOR.PROGRESS);
     }
 
     if (idleCounter >= actionDelay) {
-      clearTimeout(interval.current);
-      setMonitorStatusMsg('Detected download completion.');
+      clearInterval(interval.current);
+      setMonitorStatusMsg(UI_MESSAGES.MONITOR.COMPLETED);
       DesktopApi.executeAction(actionType);
       openModal(Modal.ACTION_CONFIRMATION);
     }
@@ -65,16 +64,17 @@ const useSystemMonitor = () => {
 
   useEffect(() => {
     if (!isMonitoring) {
-      clearTimeout(interval.current);
+      clearInterval(interval.current);
       return;
     }
 
-    setMonitorStatusMsg('Starting...');
+    setMonitorStatusMsg(UI_MESSAGES.MONITOR.STARTING);
     idleCounter = 0;
+    activityCounter = 0;
     interval.current = setInterval(monitor, INTERVAL_MS);
 
     return () => {
-      clearTimeout(interval.current);
+      clearInterval(interval.current);
     };
   }, [isMonitoring]);
 };

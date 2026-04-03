@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import wails from '../wails.json' assert { type: 'json' };
+import wails from '../wails.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({

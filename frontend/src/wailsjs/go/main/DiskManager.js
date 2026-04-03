@@ -9,3 +9,7 @@ export function GetDiskWriteSpeed(arg1) {
 export function GetProcesses() {
   return window['go']['main']['DiskManager']['GetProcesses']();
 }
+
+export function SetContext(arg1) {
+  return window['go']['main']['DiskManager']['SetContext'](arg1);
+}

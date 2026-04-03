@@ -37,7 +37,11 @@ const InterfacePicker = () => {
 
       <Dropdown>
         <DropdownTrigger>
-          <Button variant="bordered" className="capitalize">
+          <Button
+            variant="bordered"
+            className="capitalize"
+            aria-label="Select Network Interface"
+          >
             {selectedValue || 'Select Network Interface'}
           </Button>
         </DropdownTrigger>
@@ -47,8 +51,12 @@ const InterfacePicker = () => {
           selectionMode="single"
           selectedKeys={[selectedMac as string]}
           onSelectionChange={(selection) => {
-            const [first] = selection;
-            setSelectedMac(first.toString());
+            const keys = Array.from(selection as Set<string>);
+            const first = keys[0];
+
+            if (first) {
+              setSelectedMac(first.toString());
+            }
           }}
         >
           {interfaces.map((item) => (

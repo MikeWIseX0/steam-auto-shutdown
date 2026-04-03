@@ -3,6 +3,8 @@ import { store } from '../store';
 import { DesktopApi } from '../desktop';
 import { TProcess } from '../types';
 
+import { UI_MESSAGES } from '../constants/messages';
+
 export const setSelectedMac = (mac: string | undefined) => {
   store.dispatch(appSliceActions.setSelectedMac(mac));
 };
@@ -27,12 +29,24 @@ export const toggleTheme = () => {
   store.dispatch(appSliceActions.toggleTheme());
 };
 
+export const resetSettings = () => {
+  store.dispatch(appSliceActions.resetSettings());
+};
+
 export const setTargetProcess = (process: TProcess) => {
   store.dispatch(appSliceActions.setTargetProcess(process));
 };
 
 export const setMonitorStatusMsg = (msg: string) => {
-  store.dispatch(appSliceActions.setMonitorStatusMsg(msg));
+  const currentMsg = store.getState().app.monitorStatusMsg;
+  if (currentMsg !== msg) {
+    store.dispatch(appSliceActions.setMonitorStatusMsg(msg));
+  }
+};
+
+export const loadActionTimeout = async () => {
+  const timeout = await DesktopApi.getActionTimeout();
+  store.dispatch(appSliceActions.setActionTimeout(timeout));
 };
 
 export const loadInterfaces = async () => {
@@ -41,25 +55,36 @@ export const loadInterfaces = async () => {
   store.dispatch(appSliceActions.setInterfaces(results));
 
   try {
-    const detectedMac = await DesktopApi.autoDetectInterface();
+    const state = store.getState().app;
+    // Only auto-detect if we don't have a saved preference
+    if (!state.settings.selectedMac) {
+      setMonitorStatusMsg(UI_MESSAGES.INTERFACE.AUTO_DETECTING);
+      const detectedMac = await DesktopApi.autoDetectInterface();
 
-    if (detectedMac) {
-      setSelectedMac(detectedMac);
+      if (detectedMac) {
+        setSelectedMac(detectedMac);
+        setMonitorStatusMsg(UI_MESSAGES.INTERFACE.DETECTED);
+      }
     }
   } catch {
     // do nothing
   }
 };
 
+export const DEFAULT_AUTO_DETECT_PROCESS = 'steam.exe';
+
 export const getSteamProcess = async () => {
   const processes = await DesktopApi.getProcesses();
 
-  const result = processes?.find((p) => p.Name === 'steam.exe');
+  const result = processes?.find(
+    (p) =>
+      p.Name.toLowerCase() === DEFAULT_AUTO_DETECT_PROCESS.toLowerCase()
+  );
 
   if (!result) return;
 
   const process: TProcess = {
-    id: result.Pid,
+    id: result.Pid.toString(),
     name: result.Name
   };
 

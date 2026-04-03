@@ -1,11 +1,16 @@
 import { Switch, Tooltip } from '@nextui-org/react';
-import {} from '../../wailsjs/go/models';
+
 import { openModal } from '../../actions/modal';
 import { IconListSearch } from '@tabler/icons-react';
 import { Modal } from '../../types';
 import useTargetProcess from '../../hooks/use-target-process';
 
-const DiskMonitor = ({ value, onChange }) => {
+type TDiskMonitorProps = {
+  value: boolean;
+  onChange: (value: boolean) => void;
+};
+
+const DiskMonitor = ({ value, onChange }: TDiskMonitorProps) => {
   const targetProcessName = useTargetProcess();
 
   const onTargetProcessChangeClick = async () => {
@@ -16,7 +21,7 @@ const DiskMonitor = ({ value, onChange }) => {
     <div className="flex flex-col gap-2">
       <p className="text-sm">Monitor Disk</p>
 
-      <div className="flex">
+      <div className="flex items-center gap-3">
         <Switch isSelected={value} onValueChange={onChange} size="sm" name="" />
 
         <div className="flex items-center gap-1">

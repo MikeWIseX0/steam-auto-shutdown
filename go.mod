@@ -1,6 +1,6 @@
-module changeme
+module steam-auto-shutdown
 
-go 1.18
+go 1.20
 
 require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
@@ -37,5 +37,3 @@ require (
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 )
-
-// replace github.com/wailsapp/wails/v2 v2.6.0 => C:\Users\Martino\go\pkg\mod

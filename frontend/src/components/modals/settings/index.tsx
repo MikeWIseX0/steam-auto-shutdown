@@ -16,7 +16,7 @@ import {
 import { closeModals } from '../../../actions/modal';
 import DiskMonitor from '../../disk-monitor';
 import useSettings from '../../../hooks/use-settings';
-import { setSettings } from '../../../actions/app';
+import { setSettings, resetSettings } from '../../../actions/app';
 import { ActionType } from '../../../types';
 import { useMemo } from 'react';
 import { IconInfoCircle } from '@tabler/icons-react';
@@ -29,9 +29,12 @@ const SettingsModal = () => {
 
   const onChangeSettings = (event) => {
     const { name, value } = event.target;
+    const numValue = Number(value);
+
+    if (value === '' || isNaN(numValue)) return;
 
     setSettings({
-      [name]: isNaN(value) ? value : parseInt(value)
+      [name]: numValue
     });
   };
 
@@ -169,11 +172,14 @@ const SettingsModal = () => {
                         selectionMode="single"
                         selectedKeys={[actionType as string]}
                         onSelectionChange={(selection) => {
-                          const [first] = selection;
+                          const keys = Array.from(selection as Set<string>);
+                          const first = keys[0];
 
-                          setSettings({
-                            actionType: first
-                          });
+                          if (first) {
+                            setSettings({
+                              actionType: first
+                            });
+                          }
                         }}
                       >
                         <DropdownItem
@@ -208,12 +214,10 @@ const SettingsModal = () => {
             </ModalBody>
             <ModalFooter>
               <Button
+                color="danger"
+                variant="flat"
                 onPress={() => {
-                  setSettings({
-                    actionDelay: 20,
-                    speedThreshold: 200,
-                    actionType: ActionType.SHUTDOWN
-                  });
+                  resetSettings();
                 }}
                 size="sm"
               >

@@ -1,3 +1,5 @@
+// main is the official entryway to the Steam Auto Shutdown application.
+// It initializes core managers and the Wails runtime with professional-grade defaults.
 package main
 
 import (
@@ -21,9 +23,9 @@ var (
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
 	networkManager := createNetworkManager()
 	diskManager := createDiskManager()
+	app := NewApp(networkManager, diskManager)
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -34,18 +36,18 @@ func main() {
 		MinHeight:         height,
 		MaxWidth:          width,
 		MaxHeight:         height,
-		DisableResize:     false,
+		DisableResize:     true,
 		Fullscreen:        false,
 		Frameless:         false,
 		StartHidden:       false,
 		HideWindowOnClose: false,
-		BackgroundColour:  &options.RGBA{R: 255, G: 255, B: 255, A: 255},
+		BackgroundColour:  &options.RGBA{R: 20, G: 20, B: 20, A: 255},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		Menu:             nil,
 		Logger:           nil,
-		LogLevel:         logger.DEBUG,
+		LogLevel:         logger.INFO,
 		OnStartup:        app.startup,
 		OnDomReady:       app.domReady,
 		OnBeforeClose:    app.beforeClose,

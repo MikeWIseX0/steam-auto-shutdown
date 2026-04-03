@@ -14,8 +14,8 @@ const NetworkSpeed = () => {
       closeDelay={0}
     >
       <div className="flex gap-1 items-center">
-        <IconWorldDownload size="0.9rem" className="text-gray-500" />
-        <p className="text-gray-500 text-sm">{speed.toFixed(2)} MB/s</p>
+        <IconWorldDownload size="0.9rem" className="text-primary" />
+        <p className="text-foreground text-sm font-medium">{speed.toFixed(2)} MB/s</p>
       </div>
     </Tooltip>
   );

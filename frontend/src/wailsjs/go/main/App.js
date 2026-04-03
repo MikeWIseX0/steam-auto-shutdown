@@ -10,6 +10,14 @@ export function ExecuteAction(arg1) {
   return window['go']['main']['App']['ExecuteAction'](arg1);
 }
 
+export function GetActionTimeout() {
+  return window['go']['main']['App']['GetActionTimeout']();
+}
+
 export function OpenInBrowser(arg1) {
   return window['go']['main']['App']['OpenInBrowser'](arg1);
+}
+
+export function SetActionTimeout(arg1) {
+  return window['go']['main']['App']['SetActionTimeout'](arg1);
 }

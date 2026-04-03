@@ -1,7 +1,6 @@
 import {
   Button,
   Input,
-  Link,
   Listbox,
   ListboxItem,
   Modal,
@@ -80,16 +79,14 @@ const ProcessPicker = () => {
               />
               <p className="text-gray-500 text-xs">
                 The process you pick here will only be used to monitor the disk
-                activity.{' '}
-                <Link href="#" className="text-xs">
-                  Learn more.
-                </Link>
+                activity.
               </p>
             </ModalHeader>
             <ModalBody>
               <div
+                className="overflow-y-auto"
                 style={{
-                  height: '130px'
+                  maxHeight: '400px'
                 }}
               >
                 {loading ? (
@@ -109,28 +106,37 @@ const ProcessPicker = () => {
                     emptyContent="No processes found."
                     selectedKeys={[targetProcess?.id?.toString() ?? '']}
                     onSelectionChange={(selection) => {
-                      const [processId] = selection;
+                      const keys = Array.from(selection as Set<string>);
+                      const processId = keys[0];
+
+                      if (!processId) return;
+
+                      const found = processes.find(
+                        (p) => p.Pid.toString() === processId
+                      );
+
+                      if (!found) return;
 
                       const process: TProcess = {
                         id: processId.toString(),
-                        name:
-                          processes.find((p) => p.Pid.toString() === processId)
-                            ?.Name ?? ''
+                        name: found.Name ?? ''
                       };
 
                       setTargetProcess(process);
                     }}
                   >
-                    {filteredProcesses?.map((process) => (
-                      <ListboxItem key={process.Pid}>
-                        <p>
-                          {process.Name}{' '}
-                          <span className="text-xs text-gray-500">
-                            {process.Pid}
-                          </span>
-                        </p>
-                      </ListboxItem>
-                    ))}
+                    {filteredProcesses
+                      ?.filter((p) => p.Name) // Ensure process still has a name
+                      .map((process) => (
+                        <ListboxItem key={process.Pid}>
+                          <p className="truncate max-w-[340px]">
+                            {process.Name}{' '}
+                            <span className="text-xs text-gray-500">
+                              {process.Pid}
+                            </span>
+                          </p>
+                        </ListboxItem>
+                      ))}
                   </Listbox>
                 )}
               </div>

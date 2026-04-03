@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { getSteamProcess, loadInterfaces } from '../../actions/app';
+import {
+  getSteamProcess,
+  loadActionTimeout,
+  loadInterfaces
+} from '../../actions/app';
 import useTheme from '../../hooks/use-theme';
 import useSystemMetrics from '../../hooks/use-system-metrics';
 import useSystemMonitor from '../../hooks/use-system-monitor';
@@ -12,7 +16,11 @@ const App = () => {
   useSystemMonitor();
 
   const initApp = async () => {
-    await Promise.all([loadInterfaces(), getSteamProcess()]);
+    await Promise.all([
+      loadInterfaces(),
+      getSteamProcess(),
+      loadActionTimeout()
+    ]);
   };
 
   useEffect(() => {

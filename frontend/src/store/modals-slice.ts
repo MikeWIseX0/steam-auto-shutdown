@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Modal, TGenericObject } from '../types';
 
-export interface IAppState {
+export interface IModalsState {
   openModal: Modal | undefined;
   props?: TGenericObject;
   isOpen: boolean;
 }
 
-const initialState: IAppState = {
+const initialState: IModalsState = {
   openModal: undefined,
   props: {},
   isOpen: false
 };
 
-export const appSlice = createSlice({
+export const modalsSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
@@ -33,6 +33,6 @@ export const appSlice = createSlice({
   }
 });
 
-export const modalsSliceActions = appSlice.actions;
+export const modalsSliceActions = modalsSlice.actions;
 
-export default appSlice.reducer;
+export default modalsSlice.reducer;
